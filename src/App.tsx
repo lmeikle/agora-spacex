@@ -8,7 +8,9 @@ function App() {
       <header className="App-header">
         <img src="./logo.png" className="App-logo" alt="logo" />
       </header>
-      <PastLaunches />
+      <main>
+        <PastLaunches />
+      </main>
     </div>
   );
 }

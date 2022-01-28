@@ -58,7 +58,7 @@ function LaunchesTable({ launchData }: Props) {
   return (
     <div>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 250 }} aria-label="Launches Table">
+        <Table aria-label="Launches Table">
           <colgroup>
             <col style={{ width: '20%' }} />
             <col style={{ width: '20%' }} />

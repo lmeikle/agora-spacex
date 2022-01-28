@@ -1,46 +1,39 @@
-# Getting Started with Create React App
+# Agora - SpaceX App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## To run it
 
-## Available Scripts
+`npm run start`
 
-In the project directory, you can run:
+## To run the tests
 
-### `npm start`
+`npm run test`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Notes
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Initialized the app using CRA (with typescript)
+- Installed prettier and MUI
+- Used native fetch, if I need to support ie11 I would use something like axios or a fetch polyfill
+- Used the 'v4/launches/query' endpoint to limit results to 50 and perform sorting (v4/launches/past didn't seem to support this)
+- Not used Redux at this point as it's a simple app. 
+  If the app grew more complex I would use RTK with RTK Query.
+- Used @testing-library as I'm a big fan of it.
+- Used the table from MUI rather than adding another dependency like ag-grid.
+  (It meets the requirements for the current simple table.)
+- I've interpreted the requirements as: "limit the results to show the 50 most recent launches and
+any sorting/searching should apply to that limited set of data". Hence, the sorting and searching is performed client side.
+- There are lots of different ways to handle showing the rocket details, I've gone with simple state and a modal dialog. 
+Other options could be setting the rocket id in the url and opening the details as a page (or still as a modal).
+Or even using the expandable row functionality that MUI offers.
+- I haven't implemented search by launch name - I felt that hopefully I had done enough to demonstrate my ability and decided to spend more time on polishing what I had already.
+- Accessibility - I have run the app through Lighthouse and axe DevTools Chrome extension and they both score 100%.
+I've also manually tested keyboard navigation works. 
+However I do think the focus highlighting on the MUI table headers/sort icon isn't very clear - see below for future improvements.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Things I would do next
+- I've used the MUI Table to display the data but tables don't really work well on small screens, hence it's not fully responsive. 
+I would think about switching to a card style layout on smaller devices.
+- Show loading indicators
+- Handle 'No data found'
+- Handle errors
+- Improve/tweak the focus highlighting in the MUI table headers and sort icon
+- Tested in Chrome and Edge, test across other major browsers like Firefox and Safari
