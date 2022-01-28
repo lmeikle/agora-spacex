@@ -11,7 +11,7 @@ function PastLaunches() {
     const data = {
       query: {},
       options: {
-        select: ['name', 'date_utc', 'details'],
+        select: ['name', 'date_utc', 'details', 'rocket'],
         sort: '-date_utc',
         limit: 50,
       },
@@ -29,7 +29,7 @@ function PastLaunches() {
         setLaunchData(data.docs);
       })
       .catch((e) => {
-        // TODO show an error message of some kind
+        // todo error handing
       });
   }, [setLaunchData]);
 

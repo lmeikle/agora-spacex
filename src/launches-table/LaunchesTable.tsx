@@ -1,4 +1,4 @@
-import { Box, TableSortLabel } from '@mui/material';
+import { Box, Button, TableSortLabel } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,9 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { visuallyHidden } from '@mui/utils';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LaunchData } from '../models/LaunchData';
 import { SortOrder } from '../models/SortOrder';
+import RocketDetails from '../rocket-details/RocketDetails';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -38,6 +39,7 @@ function LaunchesTable({ launchData }: Props) {
   const [sortedData, setSortedData] = React.useState<LaunchData[]>(launchData);
   const [order, setOrder] = React.useState<SortOrder>('desc');
   const [orderBy, setOrderBy] = React.useState<keyof LaunchData>('date_utc');
+  const [rocketId, setRocketId] = useState<any>();
 
   const onSort = (property: keyof LaunchData): void => {
     const isAsc = orderBy === property && order === 'asc';
@@ -49,10 +51,14 @@ function LaunchesTable({ launchData }: Props) {
     setSortedData([...launchData].sort(getComparator(order, orderBy)));
   }, [order, orderBy, launchData]);
 
+  const clearRocketId = () => {
+    setRocketId(undefined);
+  };
+
   return (
     <div>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 250 }} aria-label="simple table">
+        <Table sx={{ minWidth: 250 }} aria-label="Launches Table">
           <colgroup>
             <col style={{ width: '20%' }} />
             <col style={{ width: '20%' }} />
@@ -94,14 +100,22 @@ function LaunchesTable({ launchData }: Props) {
           <TableBody>
             {sortedData.map((launch) => (
               <TableRow key={launch.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell>{launch.name}</TableCell>
-                <TableCell>{new Date(launch.date_utc).toLocaleString()}</TableCell>
-                <TableCell>{launch.details}</TableCell>
+                <TableCell style={{ verticalAlign: 'top' }}>{launch.name}</TableCell>
+                <TableCell style={{ verticalAlign: 'top' }}>{new Date(launch.date_utc).toLocaleString()}</TableCell>
+                <TableCell>
+                  <div>
+                    <div data-testid="details">{launch.details}</div>
+                    <Button variant="outlined" size="small" onClick={() => setRocketId(launch.rocket)}>
+                      View Rocket Details
+                    </Button>
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <RocketDetails id={rocketId} close={clearRocketId} />
     </div>
   );
 }

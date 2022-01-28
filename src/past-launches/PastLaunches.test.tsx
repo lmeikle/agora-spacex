@@ -9,6 +9,7 @@ const launchData: LaunchData = {
   name: faker.lorem.words(2),
   date_utc: faker.date.past().toUTCString(),
   details: faker.lorem.paragraph(),
+  rocket: faker.datatype.uuid(),
 };
 
 describe('PastLaunches', () => {
@@ -43,14 +44,10 @@ describe('PastLaunches', () => {
     expect(JSON.parse(fetchMock.mock.calls[0][1]!.body).query).toEqual({});
     // @ts-ignore just ignoring these TS errors for speed
     expect(JSON.parse(fetchMock.mock.calls[0][1]!.body).options).toEqual({
-      select: ['name', 'date_utc', 'details'],
+      select: ['name', 'date_utc', 'details', 'rocket'],
       sort: '-date_utc',
       limit: 50,
     });
-  });
-
-  it('handles errors when fetching from the spacex api', async () => {
-    // TODO test this once implemented
   });
 
   it('renders the LaunchesTable component with the launch data', async () => {
