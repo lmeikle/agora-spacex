@@ -1,6 +1,7 @@
 import { Box, Link, Modal, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { RocketData } from '../models/RocketData';
+import { skipToken } from '@reduxjs/toolkit/query';
+import React from 'react';
+import { useGetRocketDetailsQuery } from '../services/spacex-api';
 
 interface Props {
   id: string;
@@ -20,39 +21,24 @@ const style = {
 };
 
 function RocketDetails({ id, close }: Props) {
-  const [rocketData, setRocketData] = useState<RocketData | undefined>();
+  const { data, error, isLoading } = useGetRocketDetailsQuery(id ?? skipToken);
 
-  useEffect(() => {
-    if (id) {
-      fetch(`https://api.spacexdata.com/v4/rockets/${id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setRocketData({
-            name: data.name,
-            description: data.description,
-            wikipedia: data.wikipedia,
-          });
-        })
-        .catch((e) => {
-          // todo error handing
-        });
-    }
-  }, [id, setRocketData]);
+  // TODO - future work: handle error and isLoading states
 
   return (
-    <Modal open={id !== undefined} onClose={close} aria-labelledby="modal-title" aria-describedby="modal-description">
+    <Modal open={true} onClose={close} aria-labelledby="modal-title" aria-describedby="modal-description">
       <Box sx={style}>
-        {rocketData && (
+        {data && (
           <>
             <Typography id="modal-title" variant="h6" component="h2">
-              {rocketData.name} Rocket Details
+              {data.name} Rocket Details
             </Typography>
             <Typography id="modal-description" sx={{ mt: 2 }}>
-              {rocketData.description}
+              {data.description}
             </Typography>
             <Typography sx={{ mt: 2 }}>
-              <Link href={rocketData.wikipedia} target="_blank" rel="noopener">
-                {rocketData.wikipedia}
+              <Link href={data.wikipedia} target="_blank" rel="noopener">
+                {data.wikipedia}
               </Link>
             </Typography>
           </>

@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import fetchMock from 'jest-fetch-mock';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { RocketData } from '../models/RocketData';
+import * as spacexApi from '../services/spacex-api';
 import RocketDetails from './RocketDetails';
 
 const id = faker.datatype.uuid();
@@ -15,25 +15,18 @@ const rocketData: RocketData = {
 
 describe('RocketDetails', () => {
   beforeEach((): void => {
-    fetchMock.resetMocks();
-    fetchMock.mockResponse(JSON.stringify(rocketData));
+    jest.spyOn(spacexApi, 'useGetRocketDetailsQuery').mockImplementation(() => {
+      return {
+        data: rocketData,
+      } as any;
+    });
   });
 
-  it('fetches the rocket details from the spacex api for the provided rocket id', async () => {
+  it('renders the data fetched using the useGetRocketDetailsQuery spacex api hook', async () => {
     render(<RocketDetails id={id} close={close} />);
 
-    await waitFor(() => {
-      expect(fetchMock.mock.calls.length).toBe(1);
-    });
-    expect(fetchMock.mock.calls[0][0]).toBe(`https://api.spacexdata.com/v4/rockets/${id}`);
-  });
-
-  it('renders the fetched rocket data', async () => {
-    render(<RocketDetails id={id} close={close} />);
-
-    await waitFor(() => {
-      expect(screen.getByText(`${rocketData.name} Rocket Details`)).toBeInTheDocument();
-    });
+    expect(spacexApi.useGetRocketDetailsQuery).toHaveBeenCalled();
+    expect(screen.getByText(`${rocketData.name} Rocket Details`)).toBeInTheDocument();
     expect(screen.getByText(rocketData.description)).toBeInTheDocument();
     expect(screen.getByText(rocketData.wikipedia)).toBeInTheDocument();
   });
@@ -41,11 +34,8 @@ describe('RocketDetails', () => {
   it('closing the modal calls the close prop', async () => {
     render(<RocketDetails id={id} close={close} />);
 
-    await waitFor(() => {
-      expect(screen.getByText(`${rocketData.name} Rocket Details`)).toBeInTheDocument();
-    });
+    expect(screen.getByText(`${rocketData.name} Rocket Details`)).toBeInTheDocument();
 
-    // close the modal
     fireEvent(
       document.querySelector('.MuiBackdrop-root') as Element,
       new MouseEvent('click', {

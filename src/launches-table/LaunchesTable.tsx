@@ -115,7 +115,7 @@ function LaunchesTable({ launchData }: Props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <RocketDetails id={rocketId} close={clearRocketId} />
+      {rocketId && <RocketDetails id={rocketId} close={clearRocketId} />}
     </div>
   );
 }

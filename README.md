@@ -12,13 +12,11 @@
 
 - Initialized the app using CRA (with typescript)
 - Installed prettier and MUI
-- Used native fetch, if I need to support ie11 I would use something like axios or a fetch polyfill
 - Used the 'v4/launches/query' endpoint to limit results to 50 and perform sorting (v4/launches/past didn't seem to support this)
-- Not used Redux at this point as it's a simple app. 
-  If the app grew more complex I would use RTK with RTK Query.
+- I have added Redux as I wanted to use RTK Query to nicely separate my api logic and handle caching etc..
+  I could have used something like React Query for this, so as not to require installing Redux, however I have assumed this app will grow in complexity and therefore Redux is likely to be needed.
 - Used @testing-library as I'm a big fan of it.
 - Used the table from MUI rather than adding another dependency like ag-grid.
-  (It meets the requirements for the current simple table.)
 - I've interpreted the requirements as: "limit the results to show the 50 most recent launches and
 any sorting/searching should apply to that limited set of data". Hence, the sorting and searching is performed client side.
 - There are lots of different ways to handle showing the rocket details, I've gone with simple state and a modal dialog. 
@@ -32,8 +30,8 @@ However I do think the focus highlighting on the MUI table headers/sort icon isn
 ## Things I would do next
 - I've used the MUI Table to display the data but tables don't really work well on small screens, hence it's not fully responsive. 
 I would think about switching to a card style layout on smaller devices.
+- Improve/tweak the focus highlighting in the MUI table headers and sort icon
 - Show loading indicators
 - Handle 'No data found'
 - Handle errors
-- Improve/tweak the focus highlighting in the MUI table headers and sort icon
 - Tested in Chrome and Edge, test across other major browsers like Firefox and Safari

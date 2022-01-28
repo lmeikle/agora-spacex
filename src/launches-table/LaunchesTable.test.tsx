@@ -1,9 +1,18 @@
 import { faker } from '@faker-js/faker';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import fetchMock from 'jest-fetch-mock';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { LaunchData } from '../models/LaunchData';
 import LaunchesTable from './LaunchesTable';
+
+jest.mock('../rocket-details/RocketDetails', () => ({ id, close }: { id: string; close: () => void }) => {
+  return (
+    <>
+      <div>Mock Rocket Details</div>
+      <div data-testid="rocket-id">{id}</div>
+      <button onClick={close}>Close</button>
+    </>
+  );
+});
 
 const launchEntry1 = {
   name: 'foo',
@@ -21,10 +30,6 @@ const launchData: LaunchData[] = [launchEntry1, launchEntry2];
 
 const assertTableRendersCorrectly = async (sortedData: LaunchData[]) => {
   const tableEl = screen.getByRole('table');
-
-  await waitFor(() => {
-    expect(screen.getByText(launchData[0].name)).toBeInTheDocument();
-  });
 
   const tableRows = tableEl.querySelectorAll('tbody tr');
   const firstRow = tableRows[0].querySelectorAll('td');
@@ -119,13 +124,8 @@ describe('LaunchesTable', () => {
     expect(screen.getByText('Details').closest('th')).not.toHaveAttribute('aria-sort');
   });
 
-  it('clicking a View Rocket Details button shows the Rocket Details model', async () => {
+  it('clicking a View Rocket Details button shows the RocketDetails component', async () => {
     render(<LaunchesTable launchData={launchData} />);
-
-    const rocketData = {
-      name: faker.lorem.words(2),
-    };
-    fetchMock.mockResponseOnce(JSON.stringify(rocketData));
 
     fireEvent(
       screen.getAllByText('View Rocket Details')[0],
@@ -135,19 +135,17 @@ describe('LaunchesTable', () => {
       }),
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(`${rocketData.name} Rocket Details`)).toBeInTheDocument();
-    });
+    expect(screen.getByText('Mock Rocket Details')).toBeInTheDocument();
+    expect(screen.getByTestId('rocket-id').textContent).toBe(launchEntry2.rocket);
 
-    // close the modal
     fireEvent(
-      document.querySelector('.MuiBackdrop-root') as Element,
+      screen.getByText('Close'),
       new MouseEvent('click', {
         bubbles: true,
         cancelable: true,
       }),
     );
 
-    expect(screen.queryByText(`${rocketData.name} Rocket Details`)).not.toBeInTheDocument();
+    expect(screen.queryByText('Mock Rocket Details')).not.toBeInTheDocument();
   });
 });
