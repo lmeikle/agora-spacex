@@ -8,7 +8,7 @@ describe('getPastLaunches', () => {
     docs: ['some data'],
   };
 
-  afterEach(() => {
+  beforeEach(() => {
     fetchMock.resetMocks();
 
     // clear RTK Query cache after each test
@@ -16,7 +16,7 @@ describe('getPastLaunches', () => {
   });
 
   it('request is correct', () => {
-    fetchMock.mockResponseOnce(JSON.stringify(mockData));
+    fetchMock.mockResponse(JSON.stringify(mockData));
 
     return store.dispatch<any>(spacexApi.endpoints.getPastLaunches.initiate(undefined)).then(() => {
       expect(fetchMock).toBeCalledTimes(1);
@@ -70,7 +70,7 @@ describe('getRocketDetails', () => {
     wikipedia: faker.internet.url(),
   };
 
-  afterEach(() => {
+  beforeEach(() => {
     fetchMock.resetMocks();
 
     // clear RTK Query cache after each test
@@ -78,7 +78,7 @@ describe('getRocketDetails', () => {
   });
 
   it('request is correct', () => {
-    fetchMock.mockResponseOnce(JSON.stringify(mockData));
+    fetchMock.mockResponse(JSON.stringify(mockData));
 
     return store.dispatch<any>(spacexApi.endpoints.getRocketDetails.initiate(id)).then(() => {
       expect(fetchMock).toBeCalledTimes(1);

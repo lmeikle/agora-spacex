@@ -26,12 +26,12 @@ Or even using the expandable row functionality that MUI offers.
 - Accessibility - I have run the app through Lighthouse and axe DevTools Chrome extension and they both score 100%.
 I've also manually tested keyboard navigation works. 
 However I do think the focus highlighting on the MUI table headers/sort icon isn't very clear - see below for future improvements.
+- Tested in Chrome and Edge
 
 ## Things I would do next
 - I've used the MUI Table to display the data but tables don't really work well on small screens, hence it's not fully responsive. 
 I would think about switching to a card style layout on smaller devices.
 - Improve/tweak the focus highlighting in the MUI table headers and sort icon
 - Show loading indicators
-- Handle 'No data found'
 - Handle errors
-- Tested in Chrome and Edge, test across other major browsers like Firefox and Safari
+- Handle 'No data found'

@@ -41,9 +41,6 @@
       "testing-library/no-node-access": 0
     }
   },
-  "jest": {
-    "resetMocks": false
-  },
   "browserslist": {
     "production": [
       ">0.2%",
